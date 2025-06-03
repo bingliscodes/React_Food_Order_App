@@ -10,7 +10,7 @@ export default function Header() {
   const userProgressCtx = useContext(UserProgressContext);
 
   function handleShowCart() {
-    userProgressContext.showCart();
+    userProgressCtx.showCart();
   }
 
   const totalCartItems = cartCtx.items.reduce(
