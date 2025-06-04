@@ -4,6 +4,7 @@ import useHTTP from "../hooks/useHTTP.js";
 import Input from "./UI/Input.jsx";
 import Modal from "./UI/Modal.jsx";
 import Button from "./UI/Button.jsx";
+import Error from "./Error.jsx";
 import { currencyFormatter } from "../util/formatting.js";
 import UserProgressContext from "../store/UserProgressContext.jsx";
 
@@ -58,6 +59,25 @@ export default function Checkout() {
 
   if (isSending) actions = <span>Sending order data...</span>;
 
+  if (data && !error) {
+    return (
+      <Modal
+        open={userProgressCtx.progress === "checkout"}
+        onClose={handleClose}
+      >
+        <h2>Success!</h2>
+        <p>Your order was submitted successfully.</p>
+        <p>
+          You will receive an email with more details within the next few
+          minutes.
+        </p>
+        <p className="modal-actions">
+          <Button onClick={handleClose}>Okay</Button>
+        </p>
+      </Modal>
+    );
+  }
+
   return (
     <Modal open={userProgressCtx.progress === "checkout"} onClose={handleClose}>
       <form onSubmit={handleSubmit}>
@@ -70,6 +90,10 @@ export default function Checkout() {
           <Input label="Postal Code" type="text" id="postal-code" />
           <Input label="City" type="text" id="city" />
         </div>
+
+        {error && (
+          <Error title="Error sending order data" message={error.message} />
+        )}
 
         <p className="modal-actions">{actions}</p>
       </form>
